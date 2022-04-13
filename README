@@ -1,0 +1,3 @@
+How to compile an executable:
+
+Use "python3 build.py" to create executable ./main_engine
