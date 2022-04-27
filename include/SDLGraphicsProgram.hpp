@@ -25,9 +25,7 @@
 
 // C++ Libraries
 #include <functional>
-#include <iostream>
-#include <fstream>
-#include <glad/glad.h>
+
 
 // Purpose:
 // This class sets up a full graphics program using SDL
@@ -40,15 +38,8 @@ public:
     SDLGraphicsProgram(int w, int h);
     // Destructor
     ~SDLGraphicsProgram();
-    // initialize all our shaders in openGL
-    bool InitGL();
-    // Shader helpers
-    std::string LoadShader(const std::string& fname);
-    unsigned int CreateShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
-    unsigned int CompileShader(unsigned int type, const std::string& source);
-    bool CheckLinkStatus(GLuint programID);
     // Loop that runs forever
-    void Run();
+    void SetLoopCallback(std::function<void(void)> callback);
     // Get Pointer to Window
     SDL_Window* GetSDLWindow();
     // Helper Function to Query OpenGL information.
@@ -58,15 +49,13 @@ private:
 	// The Renderer responsible for drawing objects
 	// in OpenGL (Or whatever Renderer you choose!)
     // The window we'll be rendering to
-    SDL_Window* m_window;
+    SDL_Window* m_window ;
     // OpenGL context
     SDL_GLContext m_openGLContext;
     // Window width and height
     unsigned int m_width;
     unsigned int m_height;
 
-    // Shader ID
-    GLuint shaderID;
 };
 
 #endif
