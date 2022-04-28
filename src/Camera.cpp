@@ -30,9 +30,9 @@ void Camera::MouseLook(int mouseX, int mouseY){
     m_viewDirection = glm::rotate(m_viewDirection,glm::radians(mouseDelta.y),rightVector);
 
 
-    std::cout << "m_viewDirection.x: " << m_viewDirection.x << std::endl;
+    /*std::cout << "m_viewDirection.x: " << m_viewDirection.x << std::endl;
     std::cout << "m_viewDirection.y: " << m_viewDirection.y << std::endl;
-    std::cout << "m_viewDirection.z: " << m_viewDirection.z << std::endl;
+    std::cout << "m_viewDirection.z: " << m_viewDirection.z << std::endl;*/
 
     // Update our old position after we have made changes 
     m_oldMousePosition = newMousePosition;
@@ -99,6 +99,10 @@ void Camera::SetCameraEyeDirection(float x, float y, float z){
     m_viewDirection.x = x;
     m_viewDirection.y = y;
     m_viewDirection.z = z;
+
+    /*std::cout << "for the other m_viewDirection.x: " << m_viewDirection.x << std::endl;
+    std::cout << "for the other m_viewDirection.y: " << m_viewDirection.y << std::endl;
+    std::cout << "for the other m_viewDirection.z: " << m_viewDirection.z << std::endl;*/
 }
 
 float Camera::GetEyeXPosition(){

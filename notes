@@ -35,3 +35,11 @@ For our Mirror, we just use a regular Textured Quad, we use the inherited functi
 - We also will not have to modify Render() since Render() uses a one size fits all Bind() call to bind both the vertices and the texture
 
 SceneNode's localTransform does nothing, I had to impement my own transformation to convert local space to world space if there is a parent
+
+Rear view camera implemented: the key observation I made is that camera direction uses a bounding box within (1,1,1) to determine where the camera is facing
+- This does not use roll/pitch/yaw, this is cartesian
+- Now, Camera 1(which faces backwards from Camera 0) just outright copies the direction and position coordinates of Camera 0 and inverts them
+    - trying to manage them independently earlier was frustrating, and with the implementation of how the camera works, it is not viable.
+    - since MoveForward is relative to the camera's direction, I have to copy position from Camera 0 to Camera 1
+
+Current big issue, rotate in Textured Quads does nothing, well actaully it compresses the texture, but fails to actually rotate the corners

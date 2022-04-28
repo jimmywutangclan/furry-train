@@ -88,29 +88,31 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
     std::shared_ptr<Renderer> renderer = std::make_shared<Renderer>(m_width,m_height);    
 
     // Create our terrain
-    std::shared_ptr<Terrain> myTerrain = std::make_shared<Terrain>(512,512,"terrain2.ppm");
-    myTerrain->LoadTextures("colormap.ppm","detailmap.ppm");
+    std::shared_ptr<Terrain> myTerrain = std::make_shared<Terrain>(512,512,"terrain3.ppm");
+    myTerrain->LoadTextures("grass.ppm","grass.ppm");
 
     // Create a node for our terrain 
     std::shared_ptr<SceneNode> terrainNode;
     terrainNode = std::make_shared<SceneNode>(myTerrain,"./shaders/vert.glsl","./shaders/frag.glsl");
+    terrainNode->GetLocalTransform().Rotate(glm::radians(90.0f),0,1,0);
 
-    // Create our terrain
+    // Create our "mirror"
     std::shared_ptr<Mirror> myMirror = std::make_shared<Mirror>("defaultFrag.glsl", 1);
     myMirror->MakeTexturedQuad("cat3.ppm");
     std::shared_ptr<SceneNode> mirrorNode;
     mirrorNode = std::make_shared<SceneNode>(myMirror,"./shaders/vert.glsl","./shaders/frag.glsl");
-    mirrorNode->GetLocalTransform().Translate(95,21,245);
-
-
+    
     // Set our SceneTree up
     terrainNode->AddChild(mirrorNode.get());
     renderer->setRoot(terrainNode);
 
+    mirrorNode->GetLocalTransform().Translate(95,17.5f,245);
+    mirrorNode->GetLocalTransform().Scale(15,15,0);
+    
     // Set a default position for our camera
     renderer->GetCamera(0)->SetCameraEyePosition(125.0f,50.0f,500.0f);
-    renderer->GetCamera(1)->SetCameraEyePosition(125.0f,50.0f,500.0f);
-    renderer->GetCamera(1)->SetCameraEyeDirection(0.0f,0.0f,1.0f);
+    renderer->GetCamera(1)->SetCameraEyePosition(renderer->GetCamera(0)->GetEyeXPosition(),renderer->GetCamera(0)->GetEyeYPosition(),renderer->GetCamera(0)->GetEyeZPosition());
+    renderer->GetCamera(1)->SetCameraEyeDirection(-renderer->GetCamera(0)->GetViewXDirection(),-renderer->GetCamera(0)->GetViewYDirection(),-renderer->GetCamera(0)->GetViewZDirection());
     // Main loop flag
     // If this is quit = 'true' then the program terminates.
     bool quit = false;
@@ -148,7 +150,8 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
                 int mouseX = e.motion.x;
                 int mouseY = e.motion.y;
                 renderer->GetCamera(0)->MouseLook(mouseX, mouseY);
-                renderer->GetCamera(1)->MouseLook(mouseX, mouseY);
+                renderer->GetCamera(1)->SetCameraEyeDirection(-renderer->GetCamera(0)->GetViewXDirection(),-renderer->GetCamera(0)->GetViewYDirection(),-renderer->GetCamera(0)->GetViewZDirection());
+                //renderer->GetCamera(1)->MouseLook(mouseX, mouseY);
             }
             switch(e.type){
                 // Handle keyboard presses
@@ -156,31 +159,26 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
                     switch(e.key.keysym.sym){
                         case SDLK_LEFT:
                             renderer->GetCamera(0)->MoveLeft(cameraSpeed);
-                            renderer->GetCamera(1)->MoveLeft(cameraSpeed);
                             break;
                         case SDLK_RIGHT:
                             renderer->GetCamera(0)->MoveRight(cameraSpeed);
-                            renderer->GetCamera(1)->MoveRight(cameraSpeed);
                             break;
                         case SDLK_UP:
                             renderer->GetCamera(0)->MoveForward(cameraSpeed);
-                            renderer->GetCamera(1)->MoveForward(cameraSpeed);
                             break;
                         case SDLK_DOWN:
                             renderer->GetCamera(0)->MoveBackward(cameraSpeed);
-                            renderer->GetCamera(1)->MoveBackward(cameraSpeed);
                             break;
                         case SDLK_RSHIFT:
                             renderer->GetCamera(0)->MoveUp(cameraSpeed);
-                            renderer->GetCamera(1)->MoveUp(cameraSpeed);
                             break;
                         case SDLK_RCTRL:
                             renderer->GetCamera(0)->MoveDown(cameraSpeed);
-                            renderer->GetCamera(1)->MoveDown(cameraSpeed);
                             break;
                     }
                 break;
             }
+            renderer->GetCamera(1)->SetCameraEyePosition(renderer->GetCamera(0)->GetEyeXPosition(),renderer->GetCamera(0)->GetEyeYPosition(),renderer->GetCamera(0)->GetEyeZPosition());
         } // End SDL_PollEvent loop.
 		
         // Update our scene through our renderer

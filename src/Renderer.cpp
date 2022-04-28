@@ -20,7 +20,7 @@ Renderer::Renderer(unsigned int w, unsigned int h){
     // By derfaflt create one framebuffer within the renderere.
     // create another framebuffer that sharpens the image
     Framebuffer* newFramebuffer = new Framebuffer("./shaders/defaultFrag.glsl",0.0f,0.0f,1.0f,1.0f,0);
-    Framebuffer* newFramebuffer2 = new Framebuffer("./shaders/sharperFrag.glsl",-0.7f,0.7f,0.2f,0.2f,0);
+    Framebuffer* newFramebuffer2 = new Framebuffer("./shaders/sharperFrag.glsl",-0.7f,0.7f,0.2f,0.2f,1);
     newFramebuffer->Create(w,h);
     newFramebuffer2->Create(w,h);
     m_framebuffers.push_back(newFramebuffer);
@@ -46,7 +46,7 @@ void Renderer::Update(){
     // Then perspective
     // Then the near and far clipping plane.
     // Note I cannot see anything closer than 0.1f units from the screen.
-    m_projectionMatrix = glm::perspective(45.0f,((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
+    //m_projectionMatrix = glm::perspective(45.0f,((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
 }
 
 // Initialize clear color
@@ -61,9 +61,7 @@ void Renderer::Render(){
     // not going to change.
     // First, draw the current scene into a frame buffer.
     for (int i = 0; i < m_framebuffers.size(); i++) {
-        m_framebuffers[i]->Update();
-        // Bind to our farmebuffer
-        m_framebuffers[i]->Bind();
+        m_projectionMatrix = glm::perspective(45.0f,((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
 
         // Update the Uniforms of the game objects to be passed into shaders, based on the camera that this framebuffer belongs to.
         if(m_root!=nullptr){
@@ -72,6 +70,10 @@ void Renderer::Render(){
             //       a value of '0' here.
             m_root->Update(m_projectionMatrix, m_cameras[m_framebuffers[i]->camera_id]);
         }
+
+        m_framebuffers[i]->Update();
+        // Bind to our farmebuffer
+        m_framebuffers[i]->Bind();
 
         // What we are doing, is telling opengl to create a depth(or Z-buffer) 
         // for us that is stored every frame.
