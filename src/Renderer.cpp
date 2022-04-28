@@ -58,17 +58,42 @@ void Renderer::Render(){
     std::vector<Mirror *> mirrors;
     m_root->FindMirrors(mirrors);
 
+    // iterate through all the mirrors
     for (int i = 0; i < mirrors.size(); i++) {
-        //std::cout << "belongs to camera " << mirrors[i]->camera_id << std::endl; 
         // Logic for actually imprinting onto the framebuffer goes here
-    }
-    //std::cout << "----------------------" << std::endl;
+        m_projectionMatrix = glm::perspective(45.0f,((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
+        if(m_root!=nullptr){
+            // TODO: By default, we will only have one camera
+            //       You may otherwise not want to hardcode
+            //       a value of '0' here.
+            m_root->Update(m_projectionMatrix, m_cameras[m_framebuffers[i]->camera_id]);
+        }
 
-    // Setup our uniforms
-    // In reality, only need to do this once for this
-    // particular fbo because the texture data is 
-    // not going to change.
-    // First, draw the current scene into a frame buffer.
+        mirrors[i]->UpdateBuffer();
+        mirrors[i]->BindBuffer();
+
+        // What we are doing, is telling opengl to create a depth(or Z-buffer) 
+        // for us that is stored every frame.
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_TEXTURE_2D); 
+        // This is the background of the screen.
+        glViewport(0, 0, m_screenWidth, m_screenHeight);
+        glClearColor( 0.55f, 0.45f, 1.0f, 1.f );
+        // Clear color buffer and Depth Buffer
+        // Remember that the 'depth buffer' is our
+        // z-buffer that figures out how far away items are every frame
+        // and we have to do this every frame!
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+        // Now we render our objects from our scenegraph
+        if(m_root!=nullptr){
+            m_root->Draw();
+        }
+
+        // Finish with our framebuffer
+        mirrors[i]->UnbindBuffer();
+    }
+
     for (int i = 0; i < m_framebuffers.size(); i++) {
         m_projectionMatrix = glm::perspective(45.0f,((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
 
@@ -145,7 +170,6 @@ void Renderer::Render(){
         // Unselect our shader and continue
         m_framebuffers[i]->m_fboShader->Unbind();
     }
-    //}
 }
 
 // Determines what the root is of the renderer, so the

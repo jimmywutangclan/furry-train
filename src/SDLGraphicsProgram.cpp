@@ -99,12 +99,14 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
     // Create our "mirror"
     std::shared_ptr<Mirror> myMirror = std::make_shared<Mirror>("./shaders/defaultFrag.glsl", 1);
     myMirror->MakeTexturedQuad("cat3.ppm");
+    myMirror->CreateBuffer(m_width, m_height);
     std::shared_ptr<SceneNode> mirrorNode;
     mirrorNode = std::make_shared<SceneNode>(myMirror,"./shaders/vert.glsl","./shaders/frag.glsl");
     mirrorNode->is_mirror = true;
 
     std::shared_ptr<Mirror> myQuad = std::make_shared<Mirror>("./shaders/defaultFrag.glsl", 1);
     myQuad->MakeTexturedQuad("cat3.ppm");
+    myQuad->CreateBuffer(m_width, m_height);
     std::shared_ptr<SceneNode> quadNode;
     quadNode = std::make_shared<SceneNode>(myQuad,"./shaders/vert.glsl","./shaders/frag.glsl");
 

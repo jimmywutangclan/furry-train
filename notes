@@ -29,6 +29,8 @@ Possible approach to rendering a mirror:
     - Then, after capturing the view from the quad's camera, store the view somewhere and use that for any future renderings for the quad 
 - Depth solution, to create the effect of continuous mirrors, we could probably continuously render the view from the mirror for x amounts of passes
     - This is how we can achieve the warp effect from mirrors
+    - (In the end, this isn't even necessary. What we do need is a starting first texture though. Once we have our first framebuffer, we will no longer need the starting texture as the framebuffer image replaces the starting texture. There are a lot of ticks per second, so very quickly the warp effect from mirror is achieved)
+        - However, if we reset back to the default texture for the mirror every time, we might need to do the x-passes thing.
 
 For our Mirror, we just use a regular Textured Quad, we use the inherited function from Object.hpp
 - We will not have to set up a Screen quad
@@ -44,3 +46,10 @@ Rear view camera implemented: the key observation I made is that camera directio
 
 Current big issue, rotate in Textured Quads does nothing, well actaully it compresses the texture, but fails to actually rotate the corners
 - this doesn't matter I guess, this is an issue for another day.
+
+Made Bind in Object.hpp virtual so Mirror can override
+- Bind in Object.cpp just binds the default texture on, but in our case we want to modify Bind in Mirror.cpp to bind the framebuffer image on as a texture.
+- We use a drawn_yet flag in Mirror so that we can tell when the mirror is being drawn for the first time. It will only be false the first time, for which it draws the default texture. After that, it will continuously be true and build off previous images.
+- I also copy pasted a lot of the Buffer logic from FrameBuffer and applied it to our Mirror.
+    - Mirror now also has a CreateBuffer(w,h) function to created the buffer details
+- We iterate through all the mirrors, capture the view from the mirror's respective camera, and then when the time comes to render the mirror, we use the captured view from the camera instead of the texture.

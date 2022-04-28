@@ -21,15 +21,21 @@ class Mirror : public Object {
 public:
     Mirror(std::string frag_name, int camera);
     ~Mirror();
+
+    virtual void Bind();
+
     std::shared_ptr<Shader> m_fboShader;
     // Our framebuffer also needs a texture.
     unsigned int m_colorBuffer_id;
     // the camera ID within the m_cameras vector that this framebuffer belongs to
     int camera_id;
 
-    void CaptureView();
+    void CreateBuffer(int width, int height);
+    void UpdateBuffer();
+    void BindBuffer();
+    void UnbindBuffer();
 
-    void GenerateBuffer();
+    bool drawn_yet;
 // private member variables
 private:
     // Framebuffer id

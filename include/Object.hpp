@@ -40,7 +40,7 @@ public:
     // How to draw the object
     virtual void Render();
 	// Helper method for when we are ready to draw or update our object
-	void Bind();
+	virtual void Bind();
 protected: // Classes that inherit from Object are intended to be overriden.
 
     // For now we have one buffer per object.
