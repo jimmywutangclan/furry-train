@@ -22,6 +22,8 @@
 #include "glm/vec3.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+class Mirror;
+
 class SceneNode{
 public:
     // A SceneNode is created by taking
@@ -50,6 +52,7 @@ public:
 
     bool is_mirror;
     
+    void FindMirrors(std::vector<Mirror *> & mirrors);
     // NOTE: Protected members are accessible by anything
     // that we inherit from, as well as ?
 protected:

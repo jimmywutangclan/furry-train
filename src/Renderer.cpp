@@ -1,5 +1,6 @@
 #include "Renderer.hpp"
 #include "Mirror.hpp"
+#include <iostream>
 
 // Sets the height and width of our renderer
 Renderer::Renderer(unsigned int w, unsigned int h){
@@ -54,8 +55,14 @@ void Renderer::Update(){
 // Then render the scene
 void Renderer::Render(){
     // we will likely want to first go through all the items, and if any of them are mirrors, keep track of them because we will want to draw the world from each mirror's POV first
-    std::vector<Mirror> mirrors;
-    
+    std::vector<Mirror *> mirrors;
+    m_root->FindMirrors(mirrors);
+
+    for (int i = 0; i < mirrors.size(); i++) {
+        //std::cout << "belongs to camera " << mirrors[i]->camera_id << std::endl; 
+        // Logic for actually imprinting onto the framebuffer goes here
+    }
+    //std::cout << "----------------------" << std::endl;
 
     // Setup our uniforms
     // In reality, only need to do this once for this

@@ -1,4 +1,5 @@
 #include "SceneNode.hpp"
+#include "Mirror.hpp"
 
 #include <string>
 #include <iostream>
@@ -137,4 +138,13 @@ Transform& SceneNode::GetLocalTransform(){
 // which can then be modified
 Transform& SceneNode::GetWorldTransform(){
     return m_worldTransform; 
+}
+
+void SceneNode::FindMirrors(std::vector<Mirror *> & mirrors) {
+    if (is_mirror) {
+        mirrors.push_back((Mirror *) m_object.get());
+    }
+    for (int i = 0; i < m_children.size(); i++) {
+        m_children[i]->FindMirrors(mirrors);
+    }
 }
