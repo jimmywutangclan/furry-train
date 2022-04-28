@@ -17,8 +17,8 @@ Renderer::Renderer(unsigned int w, unsigned int h){
 
     // By derfaflt create one framebuffer within the renderere.
     // create another framebuffer that sharpens the image
-    Framebuffer* newFramebuffer = new Framebuffer("./shaders/fboFrag.glsl");
-    Framebuffer* newFramebuffer2 = new Framebuffer("./shaders/sharperFrag.glsl");
+    Framebuffer* newFramebuffer = new Framebuffer("./shaders/fboFrag.glsl",0.0f,0.0f,1.0f,1.0f);
+    Framebuffer* newFramebuffer2 = new Framebuffer("./shaders/sharperFrag.glsl",0.0f,0.0f,1.0f,1.0f);
     newFramebuffer->Create(w,h);
     newFramebuffer2->Create(w,h);
     m_framebuffers.push_back(newFramebuffer);
@@ -67,65 +67,70 @@ void Renderer::Render(){
     // NOTE:
     //       Assume for this implementation we only have at most
     //       One framebuffer
-    active->Update();
-    // Bind to our farmebuffer
-    active->Bind();
+    for (int i = 0; i < m_framebuffers.size(); i++) {
+        m_framebuffers[i]->Update();
+        // Bind to our farmebuffer
+        m_framebuffers[i]->Bind();
 
-    // What we are doing, is telling opengl to create a depth(or Z-buffer) 
-    // for us that is stored every frame.
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_TEXTURE_2D); 
-    // This is the background of the screen.
-    glViewport(0, 0, m_screenWidth, m_screenHeight);
-    glClearColor( 0.55f, 0.45f, 1.0f, 1.f );
-    // Clear color buffer and Depth Buffer
-    // Remember that the 'depth buffer' is our
-    // z-buffer that figures out how far away items are every frame
-    // and we have to do this every frame!
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        // What we are doing, is telling opengl to create a depth(or Z-buffer) 
+        // for us that is stored every frame.
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_TEXTURE_2D); 
+        // This is the background of the screen.
+        glViewport(0, 0, m_screenWidth, m_screenHeight);
+        //glClearColor( 0.55f, 0.45f, 1.0f, 1.f );
+        // Clear color buffer and Depth Buffer
+        // Remember that the 'depth buffer' is our
+        // z-buffer that figures out how far away items are every frame
+        // and we have to do this every frame!
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    // Nice way to debug your scene in wireframe!
-    // TODO: Read this
-    // Understand that you should only see a single quad
-    // after rendering this, because we are only drawing.
-    // one quad
-    // This is how we know things are working with our FBO
-    //glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-    // Test to see if the 'w' key is pressed for a quick view to toggle
-    // the wireframe view.
-    const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
-    if( currentKeyStates[ SDL_SCANCODE_W ] )
-    {
-        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-    }else{
-        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+        // Nice way to debug your scene in wireframe!
+        // TODO: Read this
+        // Understand that you should only see a single quad
+        // after rendering this, because we are only drawing.
+        // one quad
+        // This is how we know things are working with our FBO
+        //glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+        // Test to see if the 'w' key is pressed for a quick view to toggle
+        // the wireframe view.
+        const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+        if( currentKeyStates[ SDL_SCANCODE_W ] )
+        {
+            glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+        }else{
+            glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+        }
+        
+        // Now we render our objects from our scenegraph
+        if(m_root!=nullptr){
+            m_root->Draw();
+        }
+
+        // Finish with our framebuffer
+        m_framebuffers[i]->Unbind();
     }
-    
-    // Now we render our objects from our scenegraph
-    if(m_root!=nullptr){
-        m_root->Draw();
+        // Now draw a new scene
+        // We do not need depth since we are drawing a '2D'
+        // image over our screen.
+        glDisable(GL_DEPTH_TEST);
+        // Clear everything away
+        // Clear the screen color, and typically I do this
+        // to something 'different' than our original as an
+        // indication that I am in a FBO. But you may choose
+        // to match the glClearColor
+        //glClearColor(1.0f,1.0f,1.0f,1.0f);
+        // We only have 'color' in our buffer that is stored
+        glClear(GL_COLOR_BUFFER_BIT); 
+    for (int i = 0; i < m_framebuffers.size(); i++) {
+        // Use our new 'simple screen shader'
+        m_framebuffers[i]->m_fboShader->Bind();
+        // Overlay our 'quad' over the screen
+        m_framebuffers[i]->DrawFBO();     // i probably don't want to use DrawFBO every time, instead I should capture the world from each camera once, save the texture, and then apply it when needed
+        // Unselect our shader and continue
+        m_framebuffers[i]->m_fboShader->Unbind();
     }
-
-    // Finish with our framebuffer
-    active->Unbind();
-    // Now draw a new scene
-    // We do not need depth since we are drawing a '2D'
-    // image over our screen.
-    glDisable(GL_DEPTH_TEST);
-    // Clear everything away
-    // Clear the screen color, and typically I do this
-    // to something 'different' than our original as an
-    // indication that I am in a FBO. But you may choose
-    // to match the glClearColor
-    glClearColor(1.0f,1.0f,1.0f,1.0f);
-    // We only have 'color' in our buffer that is stored
-    glClear(GL_COLOR_BUFFER_BIT); 
-    // Use our new 'simple screen shader'
-    active->m_fboShader->Bind();
-    // Overlay our 'quad' over the screen
-    active->DrawFBO();    
-    // Unselect our shader and continue
-    active->m_fboShader->Unbind();
+    //}
 }
 
 // Determines what the root is of the renderer, so the

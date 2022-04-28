@@ -9,9 +9,9 @@
 #include "Shader.hpp"
 
 #include <glad/glad.h>
+#include <iostream>
 
-
-Framebuffer::Framebuffer(std::string frag_name){
+Framebuffer::Framebuffer(std::string frag_name, int x, int y, int w, int h){
     // (1) ======= Setup shader
     m_fboShader = std::make_shared<Shader>();
     // Setup shaders for the Framebuffer Object
@@ -23,7 +23,13 @@ Framebuffer::Framebuffer(std::string frag_name){
     // Setup the screen quad
     // x and y of 0.0 put the quad in the top left corner
     // w and h of 1.0 stretch quad across entire screen
-    SetupScreenQuad(0.0f,0.0f,1.0f,1.0f);
+    if (strcmp(frag_name.c_str(), "./shaders/fboFrag.glsl") == 0) {
+        std::cout << "Detected" << std::endl;
+        SetupScreenQuad(0.0f,0.0f,0.5f,0.5f); // actual size of the quad
+    }
+    else {
+        SetupScreenQuad(-0.7f,0.7f,0.2f,0.1f); // actual size of the quad
+    }
 }
 
 // Destructor
@@ -48,7 +54,7 @@ void Framebuffer::Create(int width, int height){
     // Create a color attachement texture
     glGenTextures(1, &m_colorBuffer_id);
     glBindTexture(GL_TEXTURE_2D, m_colorBuffer_id);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL); 
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL); // texture size
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,m_colorBuffer_id,0);
