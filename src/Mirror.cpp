@@ -2,7 +2,7 @@
 #include "Camera.hpp"
 #include "Error.hpp"
 
-
+// Sets up a mirror with a predefined camera
 Mirror::Mirror(std::string frag_name, int camera) {
     // (1) ======= Setup shader
     m_fboShader = std::make_shared<Shader>();

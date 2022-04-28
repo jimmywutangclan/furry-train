@@ -66,7 +66,7 @@ void Renderer::Render(){
             // TODO: By default, we will only have one camera
             //       You may otherwise not want to hardcode
             //       a value of '0' here.
-            m_root->Update(m_projectionMatrix, m_cameras[m_framebuffers[i]->camera_id]);
+            m_root->Update(m_projectionMatrix, m_cameras[mirrors[i]->camera_id]);
         }
 
         mirrors[i]->UpdateBuffer();
