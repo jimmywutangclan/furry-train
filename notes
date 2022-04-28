@@ -7,5 +7,11 @@ this uses framebuffer cubes.
 
 There is a huge difference between capturing the framebuffer vs drawing the quad with the framebuffer as the texture.
 For both parts, iterate through all the framebuffers, but iterate through each step separately. 
+We want to create two Framebuffer objects within the vector, and then we want to draw both of them onto the screen.
 - this is because capturing the framebuffer just captures whatever is currently set to be rendered.
-- capturing the framebuffer is capturing the raw world, we want to make sure we capture all the views of the raw world for all the cameras we have before we start drawing the quads
+- capturing the framebuffer is capturing the raw world, we want to make sure we capture the view of the world before we create the textured quad with the framebuffer
+
+Next step: we want a camera that can have its own direction(it can point backwards, for example)
+- Add a new function to the Camera, SetCameraEyeDirection
+- Add a second camera to Renderer
+- Set the direction of the second camera to be backwards, and update input to apply input to the second camera too in SDLGraphicsProgram

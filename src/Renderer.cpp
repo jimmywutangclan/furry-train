@@ -10,8 +10,10 @@ Renderer::Renderer(unsigned int w, unsigned int h){
     // TODO: You could abstract out further functions to create
     //       a camera as a scene node and attach them at various levels.
     Camera* defaultCamera = new Camera();
+    Camera* rearViewCamera = new Camera();
     // Add our single camera
     m_cameras.push_back(defaultCamera);
+    m_cameras.push_back(rearViewCamera);
     // Initialize the root in our scene
     m_root = nullptr;
 

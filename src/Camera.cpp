@@ -94,6 +94,13 @@ void Camera::SetCameraEyePosition(float x, float y, float z){
     m_eyePosition.z = z;
 }
 
+// Set the direction for the camera
+void Camera::SetCameraEyeDirection(float x, float y, float z){
+    m_viewDirection.x = x;
+    m_viewDirection.y = y;
+    m_viewDirection.z = z;
+}
+
 float Camera::GetEyeXPosition(){
     return m_eyePosition.x;
 }

@@ -98,6 +98,8 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
 
     // Set a default position for our camera
     renderer->GetCamera(0)->SetCameraEyePosition(125.0f,50.0f,500.0f);
+    renderer->GetCamera(1)->SetCameraEyePosition(125.0f,50.0f,500.0f);
+    renderer->GetCamera(1)->SetCameraEyeDirection(0.0f,0.0f,1.0f);
     // Main loop flag
     // If this is quit = 'true' then the program terminates.
     bool quit = false;
@@ -135,6 +137,7 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
                 int mouseX = e.motion.x;
                 int mouseY = e.motion.y;
                 renderer->GetCamera(0)->MouseLook(mouseX, mouseY);
+                renderer->GetCamera(1)->MouseLook(mouseX, mouseY);
             }
             switch(e.type){
                 // Handle keyboard presses
@@ -142,27 +145,27 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
                     switch(e.key.keysym.sym){
                         case SDLK_LEFT:
                             renderer->GetCamera(0)->MoveLeft(cameraSpeed);
+                            renderer->GetCamera(1)->MoveLeft(cameraSpeed);
                             break;
                         case SDLK_RIGHT:
                             renderer->GetCamera(0)->MoveRight(cameraSpeed);
+                            renderer->GetCamera(1)->MoveRight(cameraSpeed);
                             break;
                         case SDLK_UP:
                             renderer->GetCamera(0)->MoveForward(cameraSpeed);
+                            renderer->GetCamera(1)->MoveForward(cameraSpeed);
                             break;
                         case SDLK_DOWN:
                             renderer->GetCamera(0)->MoveBackward(cameraSpeed);
+                            renderer->GetCamera(1)->MoveBackward(cameraSpeed);
                             break;
                         case SDLK_RSHIFT:
                             renderer->GetCamera(0)->MoveUp(cameraSpeed);
-                            break;
-                        case SDLK_1:
-                            renderer->changeActive(0);
-                            break;
-                        case SDLK_2:
-                            renderer->changeActive(1);
+                            renderer->GetCamera(1)->MoveUp(cameraSpeed);
                             break;
                         case SDLK_RCTRL:
                             renderer->GetCamera(0)->MoveDown(cameraSpeed);
+                            renderer->GetCamera(1)->MoveDown(cameraSpeed);
                             break;
                     }
                 break;

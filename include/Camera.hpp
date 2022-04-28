@@ -29,6 +29,8 @@ public:
     void MoveDown(float speed);
     // Set the position for the camera
     void SetCameraEyePosition(float x, float y, float z);
+    // Set the direction for the camera
+    void SetCameraEyeDirection(float x, float y, float z);
     // Returns the Camera X Position where the eye is 
     float GetEyeXPosition();
     // Returns the Camera Y Position where the eye is 
