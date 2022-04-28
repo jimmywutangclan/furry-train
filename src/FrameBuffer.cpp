@@ -11,7 +11,7 @@
 #include <glad/glad.h>
 #include <iostream>
 
-Framebuffer::Framebuffer(std::string frag_name, float x, float y, float w, float h){
+Framebuffer::Framebuffer(std::string frag_name, float x, float y, float w, float h, int camera){
     // (1) ======= Setup shader
     m_fboShader = std::make_shared<Shader>();
     // Setup shaders for the Framebuffer Object
@@ -21,16 +21,8 @@ Framebuffer::Framebuffer(std::string frag_name, float x, float y, float w, float
     m_fboShader->CreateShader(fboVertexShader,fboFragmentShader);       
     // (2) ======= Setup quad to draw to
     // Setup the screen quad
-    // x and y of 0.0 put the quad in the top left corner
-    // w and h of 1.0 stretch quad across entire screen
     SetupScreenQuad(x,y,w,h);
-    /*if (strcmp(frag_name.c_str(), "./shaders/fboFrag.glsl") == 0) {
-        std::cout << "Detected" << std::endl;
-        SetupScreenQuad(0.0f,0.0f,0.5f,0.5f); // actual size of the quad
-    }
-    else {
-        SetupScreenQuad(-0.7f,0.7f,0.2f,0.1f); // actual size of the quad
-    }*/
+    camera_id = camera;
 }
 
 // Destructor

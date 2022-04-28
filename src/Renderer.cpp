@@ -19,8 +19,8 @@ Renderer::Renderer(unsigned int w, unsigned int h){
 
     // By derfaflt create one framebuffer within the renderere.
     // create another framebuffer that sharpens the image
-    Framebuffer* newFramebuffer = new Framebuffer("./shaders/fboFrag.glsl",0.0f,0.0f,1.0f,1.0f);
-    Framebuffer* newFramebuffer2 = new Framebuffer("./shaders/sharperFrag.glsl",-0.7f,0.7f,0.2f,0.1f);
+    Framebuffer* newFramebuffer = new Framebuffer("./shaders/fboFrag.glsl",0.0f,0.0f,1.0f,1.0f,0);
+    Framebuffer* newFramebuffer2 = new Framebuffer("./shaders/sharperFrag.glsl",-0.7f,0.7f,0.2f,0.1f,1);
     newFramebuffer->Create(w,h);
     newFramebuffer2->Create(w,h);
     m_framebuffers.push_back(newFramebuffer);
@@ -129,7 +129,7 @@ void Renderer::Render(){
         // Use our new 'simple screen shader'
         m_framebuffers[i]->m_fboShader->Bind();
         // Overlay our 'quad' over the screen
-        m_framebuffers[i]->DrawFBO();     // i probably don't want to use DrawFBO every time, instead I should capture the world from each camera once, save the texture, and then apply it when needed
+        m_framebuffers[i]->DrawFBO();
         // Unselect our shader and continue
         m_framebuffers[i]->m_fboShader->Unbind();
     }

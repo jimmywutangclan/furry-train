@@ -22,7 +22,7 @@ class Shader;
 class Framebuffer{
 public:
     // Default Constructor
-    Framebuffer(std::string frag_name, float x, float y, float w, float h);
+    Framebuffer(std::string frag_name, float x, float y, float w, float h, int camera);
     // Destructor
     ~Framebuffer();
     // Create the framebuffer
@@ -44,6 +44,8 @@ public:
     std::shared_ptr<Shader> m_fboShader;
     // Our framebuffer also needs a texture.
     unsigned int m_colorBuffer_id;
+    // the camera ID within the m_cameras vector that this framebuffer belongs to
+    int camera_id;
 // private member variables
 private:
     // Framebuffer id
