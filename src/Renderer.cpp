@@ -64,9 +64,7 @@ void Renderer::Render(){
     // In reality, only need to do this once for this
     // particular fbo because the texture data is 
     // not going to change.
-    // NOTE:
-    //       Assume for this implementation we only have at most
-    //       One framebuffer
+    // First, draw the current scene into a frame buffer.
     for (int i = 0; i < m_framebuffers.size(); i++) {
         m_framebuffers[i]->Update();
         // Bind to our farmebuffer
@@ -123,6 +121,8 @@ void Renderer::Render(){
     glClearColor(1.0f,1.0f,1.0f,1.0f);
     // We only have 'color' in our buffer that is stored
     glClear(GL_COLOR_BUFFER_BIT); 
+
+    // Then, go through all the quads, and then actually draw the framebuffer onto each quad
     for (int i = 0; i < m_framebuffers.size(); i++) {
         // Use our new 'simple screen shader'
         m_framebuffers[i]->m_fboShader->Bind();
