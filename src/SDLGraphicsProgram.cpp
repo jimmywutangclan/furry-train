@@ -1,6 +1,8 @@
 #include "SDLGraphicsProgram.hpp"
 #include "Camera.hpp"
 #include "Terrain.hpp"
+#include "Mirror.hpp"
+#include "Object.hpp"
 // Include the 'Renderer.hpp' which deteremines what
 // the graphics API is going to be for OpenGL
 #include "Renderer.hpp"
@@ -93,7 +95,16 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
     std::shared_ptr<SceneNode> terrainNode;
     terrainNode = std::make_shared<SceneNode>(myTerrain,"./shaders/vert.glsl","./shaders/frag.glsl");
 
+    // Create our terrain
+    std::shared_ptr<Mirror> myMirror = std::make_shared<Mirror>("defaultFrag.glsl", 1);
+    myMirror->MakeTexturedQuad("cat3.ppm");
+    std::shared_ptr<SceneNode> mirrorNode;
+    mirrorNode = std::make_shared<SceneNode>(myMirror,"./shaders/vert.glsl","./shaders/frag.glsl");
+    mirrorNode->GetLocalTransform().Translate(95,21,245);
+
+
     // Set our SceneTree up
+    terrainNode->AddChild(mirrorNode.get());
     renderer->setRoot(terrainNode);
 
     // Set a default position for our camera

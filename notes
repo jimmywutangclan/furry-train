@@ -21,4 +21,17 @@ Updating models based on camera position occurs in SceneNodes, (WE DO NOT NEED T
 - All update does is fetch MVP matrices and camera data into the shader uniforms passed into OpenGL for calculation, it doesn't actually calculate anything without OpenGL. 
 - Then, make sure that there is a field within the FrameBuffer that corresponds to the ID of the camera that it belongs to(Since we are going to use multiple cameras)
 - And then call Update on the root SceneNode for each FrameBuffer, this is very computationally expensive but it is what we have to do.
-    - Maybe eventually we could consider generating one framebuffer for each camera, rather than one for each quad.  
+    - Maybe eventually we could consider generating one framebuffer for each camera, rather than one for each quad.
+
+Possible approach to rendering a mirror:
+- Create a new child Object class called Mirror
+- For the first pass, the texture could just be a satring color/texture when rendering the quad
+    - Then, after capturing the view from the quad's camera, store the view somewhere and use that for any future renderings for the quad 
+- Depth solution, to create the effect of continuous mirrors, we could probably continuously render the view from the mirror for x amounts of passes
+    - This is how we can achieve the warp effect from mirrors
+
+For our Mirror, we just use a regular Textured Quad, we use the inherited function from Object.hpp
+- We will not have to set up a Screen quad
+- We also will not have to modify Render() since Render() uses a one size fits all Bind() call to bind both the vertices and the texture
+
+SceneNode's localTransform does nothing, I had to impement my own transformation to convert local space to world space if there is a parent

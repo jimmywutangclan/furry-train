@@ -66,6 +66,12 @@ void SceneNode::Update(glm::mat4 projectionMatrix, Camera* camera){
     if(m_object!=nullptr){
         // TODO: Implement here!
     
+        if (m_parent) {
+			m_worldTransform = m_parent->m_worldTransform * m_localTransform;
+		}	
+		else {
+			m_worldTransform = m_localTransform;
+		}
         m_object->Bind();
     	// Now apply our shader 
 		m_shader->Bind();

@@ -1,5 +1,5 @@
 #include "Renderer.hpp"
-
+#include "Mirror.hpp"
 
 // Sets the height and width of our renderer
 Renderer::Renderer(unsigned int w, unsigned int h){
@@ -19,8 +19,8 @@ Renderer::Renderer(unsigned int w, unsigned int h){
 
     // By derfaflt create one framebuffer within the renderere.
     // create another framebuffer that sharpens the image
-    Framebuffer* newFramebuffer = new Framebuffer("./shaders/fboFrag.glsl",0.0f,0.0f,1.0f,1.0f,0);
-    Framebuffer* newFramebuffer2 = new Framebuffer("./shaders/sharperFrag.glsl",-0.7f,0.7f,0.2f,0.1f,1);
+    Framebuffer* newFramebuffer = new Framebuffer("./shaders/defaultFrag.glsl",0.0f,0.0f,1.0f,1.0f,0);
+    Framebuffer* newFramebuffer2 = new Framebuffer("./shaders/sharperFrag.glsl",-0.7f,0.7f,0.2f,0.2f,0);
     newFramebuffer->Create(w,h);
     newFramebuffer2->Create(w,h);
     m_framebuffers.push_back(newFramebuffer);
@@ -53,6 +53,7 @@ void Renderer::Update(){
 // Setup our OpenGL State machine
 // Then render the scene
 void Renderer::Render(){
+    // we will likely want to first go through all the items, and if any of them are mirrors, keep track of them because we will want to draw the world from each mirror's POV first
 
     // Setup our uniforms
     // In reality, only need to do this once for this
