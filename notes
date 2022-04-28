@@ -15,3 +15,6 @@ Next step: we want a camera that can have its own direction(it can point backwar
 - Add a new function to the Camera, SetCameraEyeDirection
 - Add a second camera to Renderer
 - Set the direction of the second camera to be backwards, and update input to apply input to the second camera too in SDLGraphicsProgram
+
+Updating models based on camera position occurs in SceneNodes, we will want to retain the original SceneNode, make a copy, and then apply the view transformations onto both SceneNodes. 
+- Then, create a framebuffer from each Camera's POV.
