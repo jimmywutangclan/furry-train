@@ -16,5 +16,6 @@ Next step: we want a camera that can have its own direction(it can point backwar
 - Add a second camera to Renderer
 - Set the direction of the second camera to be backwards, and update input to apply input to the second camera too in SDLGraphicsProgram
 
-Updating models based on camera position occurs in SceneNodes, we will want to retain the original SceneNode, make a copy, and then apply the view transformations onto both SceneNodes. 
+Updating models based on camera position occurs in SceneNodes, (WE DO NOT NEED TO COPY SINCE THE SHADER UNIFORMS CAN EASILY BE REMADE FROM ANOTHER CAMERA'S PERSPECTIVE, USING UPDATE IN SCENENODE UPDATES THE SHADER UNIFORMS, NOT THE OBJECT DATA AND COORDINATES ITSELF)
+- When we call Update using another camera, we simply overwrite the previous shader uniforms from a previous camera. The previous shader's data is recoverable as long as the previous camera is used to call Update again.
 - Then, create a framebuffer from each Camera's POV.
