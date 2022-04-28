@@ -22,7 +22,7 @@ class Shader;
 class Framebuffer{
 public:
     // Default Constructor
-    Framebuffer(std::string frag_name, int x, int y, int w, int h);
+    Framebuffer(std::string frag_name, float x, float y, float w, float h);
     // Destructor
     ~Framebuffer();
     // Create the framebuffer

@@ -18,7 +18,7 @@ Renderer::Renderer(unsigned int w, unsigned int h){
     // By derfaflt create one framebuffer within the renderere.
     // create another framebuffer that sharpens the image
     Framebuffer* newFramebuffer = new Framebuffer("./shaders/fboFrag.glsl",0.0f,0.0f,1.0f,1.0f);
-    Framebuffer* newFramebuffer2 = new Framebuffer("./shaders/sharperFrag.glsl",0.0f,0.0f,1.0f,1.0f);
+    Framebuffer* newFramebuffer2 = new Framebuffer("./shaders/sharperFrag.glsl",-0.7f,0.7f,0.2f,0.1f);
     newFramebuffer->Create(w,h);
     newFramebuffer2->Create(w,h);
     m_framebuffers.push_back(newFramebuffer);
@@ -78,7 +78,7 @@ void Renderer::Render(){
         glEnable(GL_TEXTURE_2D); 
         // This is the background of the screen.
         glViewport(0, 0, m_screenWidth, m_screenHeight);
-        //glClearColor( 0.55f, 0.45f, 1.0f, 1.f );
+        glClearColor( 0.55f, 0.45f, 1.0f, 1.f );
         // Clear color buffer and Depth Buffer
         // Remember that the 'depth buffer' is our
         // z-buffer that figures out how far away items are every frame
@@ -110,18 +110,19 @@ void Renderer::Render(){
         // Finish with our framebuffer
         m_framebuffers[i]->Unbind();
     }
-        // Now draw a new scene
-        // We do not need depth since we are drawing a '2D'
-        // image over our screen.
-        glDisable(GL_DEPTH_TEST);
-        // Clear everything away
-        // Clear the screen color, and typically I do this
-        // to something 'different' than our original as an
-        // indication that I am in a FBO. But you may choose
-        // to match the glClearColor
-        //glClearColor(1.0f,1.0f,1.0f,1.0f);
-        // We only have 'color' in our buffer that is stored
-        glClear(GL_COLOR_BUFFER_BIT); 
+
+    // Now draw a new scene
+    // We do not need depth since we are drawing a '2D'
+    // image over our screen.
+    glDisable(GL_DEPTH_TEST);
+    // Clear everything away
+    // Clear the screen color, and typically I do this
+    // to something 'different' than our original as an
+    // indication that I am in a FBO. But you may choose
+    // to match the glClearColor
+    glClearColor(1.0f,1.0f,1.0f,1.0f);
+    // We only have 'color' in our buffer that is stored
+    glClear(GL_COLOR_BUFFER_BIT); 
     for (int i = 0; i < m_framebuffers.size(); i++) {
         // Use our new 'simple screen shader'
         m_framebuffers[i]->m_fboShader->Bind();
