@@ -47,6 +47,8 @@ public:
     Transform& GetWorldTransform();
     // For now we have one shader per Node.
     std::shared_ptr<Shader> m_shader; 
+
+    bool is_mirror;
     
     // NOTE: Protected members are accessible by anything
     // that we inherit from, as well as ?

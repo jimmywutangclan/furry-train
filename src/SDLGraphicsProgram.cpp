@@ -97,12 +97,12 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
     terrainNode->GetLocalTransform().Rotate(glm::radians(90.0f),0,1,0);
 
     // Create our "mirror"
-    std::shared_ptr<Mirror> myMirror = std::make_shared<Mirror>("defaultFrag.glsl", 1);
+    std::shared_ptr<Mirror> myMirror = std::make_shared<Mirror>("./shaders/defaultFrag.glsl", 1);
     myMirror->MakeTexturedQuad("cat3.ppm");
     std::shared_ptr<SceneNode> mirrorNode;
     mirrorNode = std::make_shared<SceneNode>(myMirror,"./shaders/vert.glsl","./shaders/frag.glsl");
     
-    std::shared_ptr<Mirror> myQuad = std::make_shared<Mirror>("defaultFrag.glsl", 1);
+    std::shared_ptr<Mirror> myQuad = std::make_shared<Mirror>("./shaders/defaultFrag.glsl", 1);
     myQuad->MakeTexturedQuad("cat3.ppm");
     std::shared_ptr<SceneNode> quadNode;
     quadNode = std::make_shared<SceneNode>(myQuad,"./shaders/vert.glsl","./shaders/frag.glsl");

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <typeinfo>
 
 // The constructor
 SceneNode::SceneNode(std::shared_ptr<Object> ob, std::string vertShader, std::string fragShader){
@@ -19,6 +20,9 @@ SceneNode::SceneNode(std::shared_ptr<Object> ob, std::string vertShader, std::st
 
 	// Actually create our shader
 	m_shader->CreateShader(vertexShader,fragmentShader);       
+
+    // is mirror is false by default
+    is_mirror = false;
 }
 
 // The destructor 

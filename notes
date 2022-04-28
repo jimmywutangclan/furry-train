@@ -43,3 +43,4 @@ Rear view camera implemented: the key observation I made is that camera directio
     - since MoveForward is relative to the camera's direction, I have to copy position from Camera 0 to Camera 1
 
 Current big issue, rotate in Textured Quads does nothing, well actaully it compresses the texture, but fails to actually rotate the corners
+- this doesn't matter I guess, this is an issue for another day.

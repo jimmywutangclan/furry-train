@@ -54,6 +54,8 @@ void Renderer::Update(){
 // Then render the scene
 void Renderer::Render(){
     // we will likely want to first go through all the items, and if any of them are mirrors, keep track of them because we will want to draw the world from each mirror's POV first
+    std::vector<Mirror> mirrors;
+    
 
     // Setup our uniforms
     // In reality, only need to do this once for this

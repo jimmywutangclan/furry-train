@@ -1,16 +1,11 @@
 How to compile an executable:
-Use "python3 build.py" to create executable ./main_engine
+Use "python3 build.py" to create executable ./lab
 
 Running the executable:
-./main_engine
+./lab
 
 Note: the program can easily and safely be exited by pressing the close button at the top of the window
 
 Prerequisites assumed:
 SDL installed
 Machine supports OpenGL 3.3 
-
-Attribution:
-SDLGraphicsProgram baseplate - Mike Shah
-glad/glad.h and glad.c - GLAD
-build.py - Mike Shah
