@@ -25,7 +25,6 @@
 
 // C++ Libraries
 #include <functional>
-#include <iostream>
 
 
 // Purpose:

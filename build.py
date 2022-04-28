@@ -6,7 +6,7 @@ import platform
 COMPILER="g++ -std=c++17"   # The compiler we want to use 
                                 #(You may try g++ if you have trouble)
 SOURCE="./src/*.cpp"    # Where the source code lives
-EXECUTABLE="main_engine"        # Name of the final executable
+EXECUTABLE="lab"        # Name of the final executable
 # ======================= COMMON CONFIGURATION OPTIONS ======================= #
 
 # (2)=================== Platform specific configuration ===================== #
@@ -17,7 +17,7 @@ LIBRARIES=""            # What libraries do we want to include
 
 if platform.system()=="Linux":
     ARGUMENTS="-D LINUX" # -D is a #define sent to preprocessor
-    INCLUDE_DIR="-I ./include/ -I ./../common/thirdparty/glm/"
+    INCLUDE_DIR="-I ./include/ -I include/glm"
     LIBRARIES="-lSDL2 -ldl"
 elif platform.system()=="Darwin":
     ARGUMENTS="-D MAC" # -D is a #define sent to the preprocessor.
@@ -27,7 +27,7 @@ elif platform.system()=="Windows":
     COMPILER="g++ -std=c++17" # Note we use g++ here as it is more likely what you have
     ARGUMENTS="-D MINGW -std=c++14 -static-libgcc -static-libstdc++" 
     INCLUDE_DIR="-I./include/ -I./../common/thirdparty/old/glm/"
-    EXECUTABLE="main_engine.exe"
+    EXECUTABLE="lab.exe"
     LIBRARIES="-lmingw32 -lSDL2main -lSDL2 -mwindows"
 # (2)=================== Platform specific configuration ===================== #
 
