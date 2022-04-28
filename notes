@@ -18,4 +18,5 @@ Next step: we want a camera that can have its own direction(it can point backwar
 
 Updating models based on camera position occurs in SceneNodes, (WE DO NOT NEED TO COPY SINCE THE SHADER UNIFORMS CAN EASILY BE REMADE FROM ANOTHER CAMERA'S PERSPECTIVE, USING UPDATE IN SCENENODE UPDATES THE SHADER UNIFORMS, NOT THE OBJECT DATA AND COORDINATES ITSELF)
 - When we call Update using another camera, we simply overwrite the previous shader uniforms from a previous camera. The previous shader's data is recoverable as long as the previous camera is used to call Update again.
+- All update does is fetch MVP matrices and camera data into the shader uniforms passed into OpenGL for calculation, it doesn't actually calculate anything without OpenGL. 
 - Then, create a framebuffer from each Camera's POV.
