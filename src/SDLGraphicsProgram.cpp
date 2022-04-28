@@ -102,13 +102,22 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
     std::shared_ptr<SceneNode> mirrorNode;
     mirrorNode = std::make_shared<SceneNode>(myMirror,"./shaders/vert.glsl","./shaders/frag.glsl");
     
+    std::shared_ptr<Mirror> myQuad = std::make_shared<Mirror>("defaultFrag.glsl", 1);
+    myQuad->MakeTexturedQuad("cat3.ppm");
+    std::shared_ptr<SceneNode> quadNode;
+    quadNode = std::make_shared<SceneNode>(myQuad,"./shaders/vert.glsl","./shaders/frag.glsl");
+
     // Set our SceneTree up
+    terrainNode->AddChild(quadNode.get());
     terrainNode->AddChild(mirrorNode.get());
     renderer->setRoot(terrainNode);
 
-    mirrorNode->GetLocalTransform().Translate(95,17.5f,245);
+    mirrorNode->GetLocalTransform().Translate(95,16.5f,245);
     mirrorNode->GetLocalTransform().Scale(15,15,0);
     
+    quadNode->GetLocalTransform().Translate(95,16.5f,405);
+    quadNode->GetLocalTransform().Scale(15,15,0);
+
     // Set a default position for our camera
     renderer->GetCamera(0)->SetCameraEyePosition(125.0f,50.0f,500.0f);
     renderer->GetCamera(1)->SetCameraEyePosition(renderer->GetCamera(0)->GetEyeXPosition(),renderer->GetCamera(0)->GetEyeYPosition(),renderer->GetCamera(0)->GetEyeZPosition());
