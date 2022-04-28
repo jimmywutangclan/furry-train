@@ -20,3 +20,5 @@ Updating models based on camera position occurs in SceneNodes, (WE DO NOT NEED T
 - When we call Update using another camera, we simply overwrite the previous shader uniforms from a previous camera. The previous shader's data is recoverable as long as the previous camera is used to call Update again.
 - All update does is fetch MVP matrices and camera data into the shader uniforms passed into OpenGL for calculation, it doesn't actually calculate anything without OpenGL. 
 - Then, make sure that there is a field within the FrameBuffer that corresponds to the ID of the camera that it belongs to(Since we are going to use multiple cameras)
+- And then call Update on the root SceneNode for each FrameBuffer, this is very computationally expensive but it is what we have to do.
+    - Maybe eventually we could consider generating one framebuffer for each camera, rather than one for each quad.  

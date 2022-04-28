@@ -47,14 +47,6 @@ void Renderer::Update(){
     // Then the near and far clipping plane.
     // Note I cannot see anything closer than 0.1f units from the screen.
     m_projectionMatrix = glm::perspective(45.0f,((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
-
-    // Perform the update
-    if(m_root!=nullptr){
-        // TODO: By default, we will only have one camera
-        //       You may otherwise not want to hardcode
-        //       a value of '0' here.
-        m_root->Update(m_projectionMatrix, m_cameras[0]);
-    }
 }
 
 // Initialize clear color
@@ -71,6 +63,14 @@ void Renderer::Render(){
         m_framebuffers[i]->Update();
         // Bind to our farmebuffer
         m_framebuffers[i]->Bind();
+
+        // Update the Uniforms of the game objects to be passed into shaders, based on the camera that this framebuffer belongs to.
+        if(m_root!=nullptr){
+            // TODO: By default, we will only have one camera
+            //       You may otherwise not want to hardcode
+            //       a value of '0' here.
+            m_root->Update(m_projectionMatrix, m_cameras[m_framebuffers[i]->camera_id]);
+        }
 
         // What we are doing, is telling opengl to create a depth(or Z-buffer) 
         // for us that is stored every frame.
