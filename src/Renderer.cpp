@@ -183,3 +183,8 @@ void Renderer::changeActive(int i) {
     active = m_framebuffers[i];
 }
 
+// Add a new camera to the camera list(returns the index of the camera)
+int Renderer::AddCamera(Camera * camera) {
+    m_cameras.push_back(camera);
+    return m_cameras.size() - 1;
+}

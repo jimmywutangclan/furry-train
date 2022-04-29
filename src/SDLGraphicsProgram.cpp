@@ -104,6 +104,22 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
     mirrorNode = std::make_shared<SceneNode>(myMirror,"./shaders/vert.glsl","./shaders/frag.glsl");
     mirrorNode->is_mirror = true;
 
+    // the cat in the middle
+    std::shared_ptr<Object> simpleQuad = std::make_shared<Object>();
+    simpleQuad->MakeTexturedQuad("cat3.ppm");
+    std::shared_ptr<SceneNode> simpleQuadNode;
+    simpleQuadNode = std::make_shared<SceneNode>(simpleQuad,"./shaders/vert.glsl","./shaders/frag.glsl");
+
+    std::shared_ptr<Object> wall1 = std::make_shared<Object>();
+    wall1->MakeTexturedQuad("cat3.ppm");
+    std::shared_ptr<SceneNode> wall1Node;
+    wall1Node = std::make_shared<SceneNode>(wall1,"./shaders/vert.glsl","./shaders/frag.glsl");
+
+    std::shared_ptr<Object> wall2 = std::make_shared<Object>();
+    wall2->MakeTexturedQuad("cat3.ppm");
+    std::shared_ptr<SceneNode> wall2Node;
+    wall2Node = std::make_shared<SceneNode>(wall2,"./shaders/vert.glsl","./shaders/frag.glsl");
+
     std::shared_ptr<Mirror> myQuad = std::make_shared<Mirror>("./shaders/defaultFrag.glsl", 0);
     myQuad->MakeTexturedQuad("cat3.ppm");
     myQuad->CreateBuffer(m_width, m_height);
@@ -113,14 +129,39 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
 
     // Set our SceneTree up
     terrainNode->AddChild(quadNode.get());
+    terrainNode->AddChild(simpleQuadNode.get());
     terrainNode->AddChild(mirrorNode.get());
+    terrainNode->AddChild(wall1Node.get());
+    terrainNode->AddChild(wall2Node.get());
     renderer->setRoot(terrainNode);
+
+    wall1Node->GetLocalTransform().Translate(95,16.5f,244);
+    wall1Node->GetLocalTransform().Scale(15,15,0);
 
     mirrorNode->GetLocalTransform().Translate(95,16.5f,245);
     mirrorNode->GetLocalTransform().Scale(15,15,0);
+    mirrorNode->GetLocalTransform().Rotate(glm::radians(180.0f),0,1,0);
     
+    simpleQuadNode->GetLocalTransform().Translate(95,16.5f,315);
+    simpleQuadNode->GetLocalTransform().Scale(5,5,0);
+
     quadNode->GetLocalTransform().Translate(95,16.5f,405);
     quadNode->GetLocalTransform().Scale(15,15,0);
+
+    wall2Node->GetLocalTransform().Translate(95,16.5f,406);
+    wall2Node->GetLocalTransform().Scale(15,15,0);
+
+    // Set up the cameras for the mirrors, eventually we want to have the constructor be able to just set it up without any hardcoding.
+    Camera * mirrorCamera = new Camera();
+    mirrorCamera->SetCameraEyePosition(95,16.5f,245);
+    mirrorCamera->SetCameraEyeDirection(0,0,1);
+    myMirror->camera_id = renderer->AddCamera(mirrorCamera);
+
+    Camera * quadNodeCamera = new Camera();
+    quadNodeCamera->SetCameraEyePosition(95,16.5f,405);
+    quadNodeCamera->SetCameraEyeDirection(0,0,-1);
+    myQuad->camera_id = renderer->AddCamera(quadNodeCamera);
+
 
     // Set a default position for our camera
     renderer->GetCamera(0)->SetCameraEyePosition(125.0f,50.0f,500.0f);
@@ -141,8 +182,31 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
     // Center our mouse
     SDL_WarpMouseInWindow(m_window,m_width/2,m_height/2);
 
+
+    // data properties to let the cat image in the middle oscillate for a bit(simpleQuadNode)
+    int ticksLapsed = 100;
+    int ticksAllowed = 200;
+    bool adding = false;
+
     // While application is running
     while(!quit){
+
+        if (adding) {
+            simpleQuadNode->GetLocalTransform().Translate(0.2f,0,0);
+            ticksLapsed++;
+        }
+        else {
+            simpleQuadNode->GetLocalTransform().Translate(-0.2f,0,0);
+            ticksLapsed--;
+        }
+
+        if (ticksLapsed == ticksAllowed) {
+            adding = false;
+        }
+        if (ticksLapsed == 0) {
+            adding = true;
+        }
+
         // For our terrain setup the identity transform each frame
         // By default set the terrain node to the identity
         // matrix.

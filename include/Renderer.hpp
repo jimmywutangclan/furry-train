@@ -53,6 +53,9 @@ public:
     // I ADDED THIS(changes the active frame buffer to use)
     void changeActive(int i);
 
+    // Add a camera
+    int AddCamera(Camera * camera);
+
 // TODO: maybe write getter/setter methods
 protected:
     // Root scene node
