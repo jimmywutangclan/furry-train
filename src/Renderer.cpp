@@ -67,7 +67,7 @@ void Renderer::Render(){
 
     // iterate through all the mirrors
     for (int i = 0; i < mirrors.size(); i++) {
-        // here, calculate the new direction of the camera(Hardcoded to assume that the front of the mirror plane faces the z axis)
+        // here, calculate the new direction of the camera
         glm::vec3 diffFromPlayerToMirror(m_cameras[mirrors[i]->camera_id]->m_eyePosition.x - m_cameras[0]->m_eyePosition.x,0,m_cameras[mirrors[i]->camera_id]->m_eyePosition.z - m_cameras[0]->m_eyePosition.z);
         diffFromPlayerToMirror = glm::normalize(diffFromPlayerToMirror);
         m_cameras[mirrors[i]->camera_id]->m_viewDirection.x = diffFromPlayerToMirror.x;
