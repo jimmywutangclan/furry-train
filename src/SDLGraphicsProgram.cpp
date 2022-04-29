@@ -120,6 +120,11 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
     std::shared_ptr<SceneNode> wall2Node;
     wall2Node = std::make_shared<SceneNode>(wall2,"./shaders/vert.glsl","./shaders/frag.glsl");
 
+    std::shared_ptr<Object> wall3 = std::make_shared<Object>();
+    wall3->MakeTexturedQuad("cat3.ppm");
+    std::shared_ptr<SceneNode> wall3Node;
+    wall3Node = std::make_shared<SceneNode>(wall3,"./shaders/vert.glsl","./shaders/frag.glsl");
+
     std::shared_ptr<Mirror> myQuad = std::make_shared<Mirror>("./shaders/defaultFrag.glsl", 0);
     myQuad->MakeTexturedQuad("cat3.ppm");
     myQuad->CreateBuffer(m_width, m_height);
@@ -133,6 +138,7 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
     terrainNode->AddChild(mirrorNode.get());
     terrainNode->AddChild(wall1Node.get());
     terrainNode->AddChild(wall2Node.get());
+    terrainNode->AddChild(wall3Node.get());
     renderer->setRoot(terrainNode);
 
     wall1Node->GetLocalTransform().Translate(95,16.5f,244);
@@ -151,17 +157,25 @@ void SDLGraphicsProgram::SetLoopCallback(std::function<void(void)> callback){
     wall2Node->GetLocalTransform().Translate(95,16.5f,406);
     wall2Node->GetLocalTransform().Scale(15,15,0);
 
+    wall3Node->GetLocalTransform().Translate(135,16.5f,406);
+    wall3Node->GetLocalTransform().Scale(15,15,0);
+
     // Set up the cameras for the mirrors, eventually we want to have the constructor be able to just set it up without any hardcoding.
     Camera * mirrorCamera = new Camera();
     mirrorCamera->SetCameraEyePosition(95,16.5f,245);
     mirrorCamera->SetCameraEyeDirection(0,0,1);
     myMirror->camera_id = renderer->AddCamera(mirrorCamera);
+    myMirror->forwards.x = 0;
+    myMirror->forwards.y = 0;
+    myMirror->forwards.z = 1;
 
     Camera * quadNodeCamera = new Camera();
     quadNodeCamera->SetCameraEyePosition(95,16.5f,405);
     quadNodeCamera->SetCameraEyeDirection(0,0,-1);
     myQuad->camera_id = renderer->AddCamera(quadNodeCamera);
-
+    myQuad->forwards.x = 0;
+    myQuad->forwards.y = 0;
+    myQuad->forwards.z = -1;
 
     // Set a default position for our camera
     renderer->GetCamera(0)->SetCameraEyePosition(125.0f,50.0f,500.0f);

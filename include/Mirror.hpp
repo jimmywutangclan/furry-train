@@ -36,6 +36,7 @@ public:
     void UnbindBuffer();
 
     bool drawn_yet;
+    glm::vec3 forwards;
 // private member variables
 private:
     // Framebuffer id

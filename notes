@@ -53,3 +53,10 @@ Made Bind in Object.hpp virtual so Mirror can override
 - I also copy pasted a lot of the Buffer logic from FrameBuffer and applied it to our Mirror.
     - Mirror now also has a CreateBuffer(w,h) function to created the buffer details
 - We iterate through all the mirrors, capture the view from the mirror's respective camera, and then when the time comes to render the mirror, we use the captured view from the camera instead of the texture.
+
+now, part of the last problem is that we want the mirror to reflect shapes based on the player's perspective.
+- have a default forwards vector
+- then take the point from the player
+    - finally, reflect that point across the forwards vector
+- for convenience sake, we will avoid accounting for the y axis when it comes to reflection, we will keep the means of reflection 2d instead of 3d.
+- Need to access the SceneNode for the transform, compare that with the camera position vs the player(camera 0) position.
