@@ -2,6 +2,13 @@
 #include "Mirror.hpp"
 #include <iostream>
 
+// source: https://stackoverflow.com/questions/31064234/find-the-angle-between-two-vectors-from-an-arbitrary-origin
+float angleBetween(glm::vec3 a, glm::vec3 b,glm::vec3 origin) {
+    glm::vec3 da=glm::normalize(a-origin);
+    glm::vec3 db=glm::normalize(b-origin);
+    return glm::acos(glm::dot(da, db));
+}
+
 // Sets the height and width of our renderer
 Renderer::Renderer(unsigned int w, unsigned int h){
     m_screenWidth = w;
@@ -60,6 +67,21 @@ void Renderer::Render(){
 
     // iterate through all the mirrors
     for (int i = 0; i < mirrors.size(); i++) {
+        // here, calculate the new direction of the camera(Hardcoded to assume that the front of the mirror plane faces the z axis)
+        glm::vec3 diffFromPlayerToMirror(m_cameras[mirrors[i]->camera_id]->m_eyePosition.x - m_cameras[0]->m_eyePosition.x,0,m_cameras[mirrors[i]->camera_id]->m_eyePosition.z - m_cameras[0]->m_eyePosition.z);
+        diffFromPlayerToMirror = glm::normalize(diffFromPlayerToMirror);
+        m_cameras[mirrors[i]->camera_id]->m_viewDirection.x = -diffFromPlayerToMirror.x;
+        m_cameras[mirrors[i]->camera_id]->m_viewDirection.z = diffFromPlayerToMirror.z;
+
+        // render directly in front of the mirror if the camera reflection ends up behind the mirror
+        if (mirrors[i]->forwards.z > 0 && m_cameras[mirrors[i]->camera_id]->m_viewDirection.z < 0) {
+            m_cameras[mirrors[i]->camera_id]->m_viewDirection.z = 1;
+        }
+        else if (mirrors[i]->forwards.z < 0 && m_cameras[mirrors[i]->camera_id]->m_viewDirection.z > 0) {
+            m_cameras[mirrors[i]->camera_id]->m_viewDirection.z = -1;
+        }
+
+
         // Logic for actually imprinting onto the framebuffer goes here
         m_projectionMatrix = glm::perspective(45.0f,((float)m_screenWidth)/((float)m_screenHeight),0.1f,512.0f);
         if(m_root!=nullptr){
