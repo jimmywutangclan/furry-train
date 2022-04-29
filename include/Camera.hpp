@@ -43,10 +43,6 @@ public:
     float GetViewYDirection();
     // Returns the Z 'view' direction
     float GetViewZDirection();
-private:
-
-    // Track the old mouse position
-    glm::vec2 m_oldMousePosition;
     // Where is our camera positioned
     glm::vec3 m_eyePosition;
     // What direction is the camera looking
@@ -56,6 +52,10 @@ private:
     // to 'rock' or 'rattle' the camera you might play
     // with modifying this value.
     glm::vec3 m_upVector;
+private:
+
+    // Track the old mouse position
+    glm::vec2 m_oldMousePosition;
 };
 
 
